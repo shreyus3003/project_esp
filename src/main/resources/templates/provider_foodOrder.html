@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+	<title>Foodys</title>
+	 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<meta ng-model="foodOrder.viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}" />
+  	<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+  	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+  	
+  	
+  	<script th:src="@{/js/jquery.min.js}"></script>
+  	<script th:src="@{/js/bootstrap.min.js}"></script>
+  	<script th:src="@{/js/angular.min.js}"></script>
+  	<script th:src="@{/js/notify.min.js}"></script>
+  	<script th:src="@{/js/providerController.js}" ></script>
+  	
+  	
+  	
+</head>
+
+<body ng-app="myApp" >
+
+
+<!--  <div th:replace="fragments/header :: header"></div>
+ -->
+  
+	
+<div ng-controller="providerCtrl" class="container" style="height:100vh">
+  
+  <div id="viewport">
+  <!-- Sidebar -->
+  <div th:replace="fragments/provider_nav :: header"></div>
+  <!-- Content -->
+  <div id="content">
+  
+    
+    
+    <div class="container-fluid">
+      <h1>My foodOrders</h1>
+      <p>
+      
+       <button class="btn btn--radius-2 btn--green" id="newReqBtn" ng-click="openForm()" style="float:right" ><i class="fa fa-plus"></i> New Request</button>
+      </p>
+      
+      
+      <!-- Table -->
+      
+<div id="table" class="container-table100">
+<div class="wrap-table100">
+<div class="table100">
+<table class="table table-hover table-responsive table-striped">
+<thead>
+<tr class="table100-head">
+<th class="column1">Date</th>
+<th class="column2">foodOrder ID</th>
+<th class="column3">customer Name</th>
+<th class="column4">Quoted_Price</th>
+<th class="column5">Status</th>
+<th class="column5">customer's Image</th>
+<th class="column6">Action</th>
+</tr>
+</thead>
+<tbody>
+
+<tr ng-repeat="foodOrder in foodOrders">
+<th class="column1">{{foodOrder.datetime | date}}</th>
+<th class="column2">{{foodOrder.id}}</th>
+<th class="column3">{{foodOrder.customer_name}}</th>
+<th class="column4">{{foodOrder.quoted_price}}</th>
+<th class="column5">{{foodOrder.status}}</th>
+<th class="column5"><img alt="Not available yet" width="200px" ng-click="openImage($index)" src="http://localhost:8080/downloadFile/{{foodOrder.customer_image}}" /></th>
+<th class="column6">
+<button type="button" ng-click="getfoodOrderTrack($index)" class="btn btn-success" style="margin:10px">Track</button>
+<button type="button" ng-click="edit($index)" class="btn btn-primary" style="margin:10px">Edit</button></th>
+</tr>
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+      
+      
+      <div class="card card-6" id="requestform" style=" display:none;">
+                <div class="card-heading">
+                    <h2 class="title">Submit foodOrder Request</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="#">
+                    <input type="hidden" id="id" ng-model="foodOrder.id" />
+                    <div class="form-row">
+                            <div class="name">customer Name</div>
+                            <label class="error">{{errors.customer_nameErr}}</label><br>
+                            <div class="value">
+                                <div class="">
+                                    <input class="input--style-6" type="text" ng-model="foodOrder.customer_name" placeholder="customer Name">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="name">Contact No.</div>
+                            <label class="error">{{errors.customer_contactErr}}</label><br>
+                            <div class="value">
+                                <div class="">
+                                    <input class="input--style-6" type="text" ng-model="foodOrder.customer_contact" placeholder="customer Contact Number">
+                                </div>
+                            </div>
+                        </div>
+                        
+                     <div class="form-row">
+                            <div class="name">Content-Description</div>
+                            <label class="error">{{errors.content_descriptionErr}}</label>
+                            <div class="value">
+                                <div class="">
+                                    <input class="input--style-6" type="text" ng-model="foodOrder.content_description" placeholder="Breif Description">
+                                </div>
+                            </div>
+                        </div>
+                        
+                         <div class="form-row">
+                            <div class="name">Instructions</div>
+                            <label class="error">{{errors.instructionsErr}}</label>
+                            <div class="value">
+                                <div class="">
+                                    <textarea class="textarea--style-6" ng-model="foodOrder.instructions" placeholder="Instructions to be follwed by the Passenger"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                          <div class="form-row">
+                            <div class="name">Quoted-Price $</div>
+                            <label class="error">{{errors.quoted_priceErr}}</label>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="number" min="0" ng-model="foodOrder.quoted_price" placeholder="Price">
+                                </div>
+                            </div>
+                        </div>
+                         <div class="form-row">
+                            <div class="name">Weight (in grams)</div>
+                            <label class="error">{{errors.weightErr}}</label><br>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="number" min="0" ng-model="foodOrder.weight" placeholder="Weight">
+                                </div>
+                            </div>
+                         </div>
+                         
+                         <div class="form-row">
+                            <div class="name">From City</div>
+                            <label class="error">{{errors.fcityErr}}</label><br>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="text" min="0" ng-model="foodOrder.fcity" placeholder="From City">
+                                </div>
+                            </div>
+                         </div>
+                         
+                         <div class="form-row">
+                            <div class="name">From State</div>
+                            <label class="error">{{errors.fstateErr}}</label><br>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="text" min="0" ng-model="foodOrder.fstate" placeholder="From State">
+                                </div>
+                            </div>
+                         </div>
+                         
+                         <div class="form-row">
+                            <div class="name">From Country</div>
+                            <label class="error">{{errors.fcountryErr}}</label><br>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="text" min="0" ng-model="foodOrder.fcountry" placeholder="From Country">
+                                </div>
+                            </div>
+                         </div>
+                         
+                         <div class="form-row">
+                            <div class="name">From Pincode</div>
+                            <label class="error">{{errors.fpincodeErr}}</label><br>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="number" min="0" ng-model="foodOrder.fpincode" placeholder="From Pincode">
+                                </div>
+                            </div>
+                         </div>
+                         
+                         
+                           <div class="form-row"><p>The destination address for the foodOrder --></p>
+                       </div>
+                    <div class="form-row">
+                            <div class="name">Address line1</div>
+                            <label class="error">{{errors.address_line1Err}}</label><br>
+                            <div class="value">
+                                <div class="value">
+                                    <input class="input--style-6" ng-model="foodOrder.address_line1" placeholder="Address line 1" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="name">Address line2</div>
+                          <label class="error">{{errors.address_line2Err}}</label><br>
+                            <div class="value">
+                                <input class="input--style-6" type="text" ng-model="foodOrder.address_line2" placeholder="Address line 2">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">City</div>
+                            <label class="error">{{errors.cityErr}}</label><br>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="text" ng-model="foodOrder.city" placeholder="Destination City">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">State</div>
+                            <label class="error">{{errors.stateErr}}</label><br>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="text" ng-model="foodOrder.state" placeholder="Destination State">
+                                </div>
+                            </div>
+                        </div>
+                          <div class="form-row">
+                            <div class="name">Country</div>
+                            <label class="error">{{errors.countryErr}}</label><br>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="text" ng-model="foodOrder.country" placeholder="Country">
+                                </div>
+                            </div>
+                        </div>
+                         <div class="form-row">
+                            <div class="name">PinCode</div>
+                            <label class="error">{{errors.pincodeErr}}</label><br>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-6" type="text" ng-model="foodOrder.pincode" placeholder="Pincode">
+                                </div>
+                            </div>
+                        </div>
+                        
+                       
+                       
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn--radius-2 btn--blue-2" type="button" ng-click="submitRequest()"><i class="fa fa-paper-plane"></i> Submit</button>
+                </div>
+            </div>
+    </div>
+  </div>
+</div>
+  
+  <!-- The Modal -->
+<div class="modal" id="trackerModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Tracking foodOrder</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        
+        
+
+<table class="table table-hover table-responsive table-striped">
+<thead>
+<tr class="table100-head">
+<th class="column1">Date Time</th>
+<th class="column2">Status</th>
+<th class="column3">Description</th>
+
+</tr>
+</thead>
+<tbody>
+
+<tr ng-repeat="track in trackfoodOrder">
+<th class="column1">{{track.datetime | date}}</th>
+<th class="column2">{{track.status}}</th>
+<th class="column3">{{track.description}}</th>
+</tr>
+
+</tbody>
+</table>
+
+        
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+  
+  <!--  Image modal -->
+  <div class="modal" id="imageModal">
+  <div class="modal-dialog" style="width:800px">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">customer's Image: {{openedImage}}</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        
+ 		<img alt="Not available yet" width="768px" src="http://localhost:8080/downloadFile/{{openedImage}}" />
+
+        
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+  
+  </div>
+	
+</body>
+</html>

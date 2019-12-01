@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+	<title>Foodys</title>
+	 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+  	<script th:src="@{/js/jquery.min.js}"></script>
+  	<script th:src="@{/js/bootstrap.min.js}"></script>
+  	<script th:src="@{/js/angular.min.js}"></script>
+  	<script th:src="@{/js/loginController.js}" ></script>
+  	
+  	
+  	
+</head>
+
+<body ng-app="myApp" style="background: lightblue;">
+
+
+<!--  <div th:replace="fragments/header :: header"></div>
+ -->
+  
+	
+<div ng-controller="loginCtrl" class="container" style="height:100vh">
+  <div class="row">
+   
+    <div class="col-sm-8">
+   	<div style="margin-top:10%" class="text-align:center">
+   		<img src="images/logo.png" alt="Foodys"/>
+   		<h3 style="text-align:center">
+   		 Your tag line goes here
+   		
+   		</h3>
+   	</div>
+    </div>
+    
+    <div sec:authorize="isAnonymous()" class="col-sm-4" style="margin-top:10%">
+    <div class="jumbotron">
+     
+		<form action="#"  class="form-signin">
+			<h3 class="form-signin-heading">Sign In</h3>
+			<br/>
+			 
+			<input type="email" id="username" ng-model="user.username"  th:placeholder="Email"
+				class="form-control" /> <br/> 
+			<input type="password"  th:placeholder="Password"
+				id="password" ng-model="user.password" class="form-control" /> <br /> 
+				
+			<div align="center" th:if="${param.error}">
+				<p style="font-size: 20; color: #FF1C19;">Email or Password invalid, please verify</p>
+			</div>
+			
+			<div align="center">
+					<span th:utext="${successMessage}"></span>
+			</div>
+			
+			<button class="btn btn-md btn-primary btn-block" name="Submit" value="Login" type="button" ng-click="login()" th:text="Login"></button>
+		
+		</form>
+		<p> </p>
+		<form th:action="@{/provider/registration}" method="get">
+		<button class="btn btn-md btn-warning btn-block" type="Submit">Provider Registration</button>
+		<div align="center">
+				<!-- 	<a href="/forgotPassword">forgot your password?</a> -->
+			</div>
+	    </form>	
+	    <br>
+	    <form th:action="@{/driver/registration}" method="get">
+		<button class="btn btn-md btn-warning btn-block" type="Submit">Driver Registration</button>
+		</form>	
+	</div>
+	</div>
+	</div>
+	
+	</div>
+	<div class="container-fluid" >
+		
+	</div>
+	
+</body>
+</html>

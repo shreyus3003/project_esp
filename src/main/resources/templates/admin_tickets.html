@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+	<title>Foodys</title>
+	 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<meta ng-model="ticket.viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}" />
+  	<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+  	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+  	
+  	
+  	<script th:src="@{/js/jquery.min.js}"></script>
+  	<script th:src="@{/js/bootstrap.min.js}"></script>
+  	<script th:src="@{/js/angular.min.js}"></script>
+  	<script th:src="@{/js/notify.min.js}"></script>
+  	<script th:src="@{/js/admin_ticketController.js}" ></script>
+  	
+  	
+  	
+</head>
+
+<body ng-app="myApp" >
+
+
+<!--  <div th:replace="fragments/header :: header"></div>
+ -->
+  
+	
+<div ng-controller="adminTicketCtrl" class="container" style="height:100vh">
+  
+  <div id="viewport">
+  <!-- Sidebar -->
+  <div th:replace="fragments/admin_nav :: header"></div>
+  <!-- Content -->
+  <div id="content">
+  
+    
+    
+    <div class="container-fluid">
+      <h1>All Tickets</h1>
+      <p>
+      
+       <button class="btn btn--radius-2 btn--green" id="newReqBtn" ng-click="openForm()" style="float:right" ><i class="fa fa-plus"></i> Close</button>
+      </p>
+      
+      
+      <!-- Table -->
+      
+<div id="table" class="container-table100">
+<div class="wrap-table100">
+<div class="table100">
+<table class="table table-hover table-responsive table-striped">
+<thead>
+<tr class="table100-head">
+<th class="column2">Id</th>
+<th class="column1">Date</th>
+<th class="column2">Source city</th>
+<!-- <th class="column3">Source state</th> -->
+<th class="column4">Destination city</th>
+<!-- <th class="column5">Destination state</th> -->
+<th class="column6">Departure date</th>
+<th class="column6">Arrival date</th>
+<th class="column7">Status</th>
+<!--  <th class="column8">Track</th> -->
+<th class="column9">Action</th>
+</tr>
+</thead>
+<tbody>
+	<tr ng-repeat="ticket in tickets">
+<th class="column2">{{ticket.id}}</th>
+<th class="column1">{{ticket.datetime | date}}</th>
+<th class="column3">{{ticket.source_city}}</th>
+<!-- <th class="column4">{{ticket.source_state}}</th> -->
+<th class="column5">{{ticket.destination_city}}</th>
+<!-- <th class="column6">{{ticket.destination_state}}</th> -->
+<th class="column7">{{ticket.departure_date | date}}</th>
+<th class="column8">{{ticket.arrival_date | date}}</th>
+<th class="column9" ng-if="ticket.verified=='Approved'">Approved</th>
+<th class="column9" ng-if="ticket.verified=='Rejected'">Rejected</th>
+<th class="column9" ng-if="ticket.verified=='Submitted'">Pending for Approval</th>
+
+<th class="column11">
+<button type="button" ng-if="ticket.verified!='Approved'" ng-click="approve($index)" class="btn btn-primary" style="margin:10px">Approve</button>
+<button type="button" ng-if="ticket.verified!='Rejected'" ng-click="reject($index)" class="btn btn-primary" style="margin:10px">Reject</button>
+<button type="button" ng-click="edit($index)" class="btn btn-primary" style="margin:10px">View</button></th>
+</tr>
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+      
+      
+      
+      
+      <div class="card card-6" id="requestform" style=" display:none;">
+                <div class="card-heading">
+                    <h2 class="title">Submit ticket</h2>
+                </div>
+                <div class="card-body">
+                
+                   <form method="POST" action="#">
+                    <input type="hidden" id="id" ng-model="ticket.id" />
+                    <div class="form-row">
+                            <div class="name">Source city</div>
+                            <label class="error">{{errors.source_city}}</label><br>
+                            <div class="value">
+                                <div class="">
+                                    <input class="input--style-6" type="text" ng-model="ticket.source_city" placeholder="Source city">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="name">Source state</div>
+                            <label class="error">{{errors.source_state}}</label><br>
+                            <div class="value">
+                                <div class="">
+                                    <input class="input--style-6" type="text" ng-model="ticket.source_state" placeholder="Source state">
+                                </div>
+                            </div>
+                        </div>
+                        
+                     <div class="form-row">
+                            <div class="name">Destination city</div>
+                            <label class="error">{{errors.destination_city}}</label>
+                            <div class="value">
+                                <div class="">
+                                    <input class="input--style-6" type="text" ng-model="ticket.destination_city" placeholder="Destination city">
+                                </div>
+                            </div>
+                        </div>
+                        
+                         <div class="form-row">
+                            <div class="name">Destination state</div>
+                            <label class="error">{{errors.destination_state}}</label>
+                            <div class="value">
+                                <div class="">
+                                    <input class="input--style-6" ng-model="ticket.destination_state" placeholder="Destination state">
+                                </div>
+                            </div>
+                        </div>
+                          <div class="form-row">
+                            <div class="name">Departure date</div>
+                            <label class="error">{{errors.departure_date}}</label>
+                            <div class="value">
+                                <div class="input-group">
+                                   <h4>{{ticket.departure_date}}</h4>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="form-row">
+                            <div class="name">arrival_date</div>
+                            <label class="error">{{errors.arrival_date}}</label><br>
+                            <div class="value">
+                                <div class="input-group">
+                                    <h4>{{ticket.arrival_date}}</h4>
+                                </div>
+                            </div>
+                        </div>
+                          
+                        
+                       
+                       
+                    </form>
+                </div>
+                <div class="card-footer">
+                   
+                </div>
+            </div>
+    </div>
+  </div>
+</div>
+  
+  </div>
+	
+</body>
+</html>
