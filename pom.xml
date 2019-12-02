@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.foodys</groupId>
 	<artifactId>app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1-foodys</version>
 	<packaging>jar</packaging>
 	<name>foodys</name>
 	<description>foodys</description>
